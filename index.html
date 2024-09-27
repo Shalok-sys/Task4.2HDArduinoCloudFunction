@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Traffic Light System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="heading">
+            <h2>Task 4.2HD (Remote Traffic Control System) <b><i><u> Bi-directional set up </u></i></b></h2>
+        </div>
+        <p><i>Made by Shalok Sharma</i></p>
+        <h2>Select the LED:</h2>
+        <input type="radio" id="red" value="red" name="LED">
+        <label for="red">RED LED</label>
+        <br>
+        <input type="radio" id="green" value="red" name="LED">
+        <label for="green">GREEN LED</label>
+        <br>
+        <input type="radio" id="blue" value="red" name="LED">
+        <label for="blue">BLUE LED</label>
+        <br><br>
+        <button id="toggle">Toggle</button>
+        <button id="reset">Reset</button>
+    </div>
+    <div class="container">
+        <h2>Testing (Fetching live data from the database)</h2>
+        <div id="circle1" class="circle"></div>
+        <div id="circle2" class="circle"></div>
+        <div id="circle3" class="circle"></div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAgWoOU-5Ops0IutEnvflMOT84wYy-_lk8",
+          authDomain: "remotelights-cd22c.firebaseapp.com",
+          databaseURL: "https://remotelights-cd22c-default-rtdb.firebaseio.com",
+          projectId: "remotelights-cd22c",
+          storageBucket: "remotelights-cd22c.appspot.com",
+          messagingSenderId: "752221312707",
+          appId: "1:752221312707:web:7ad60102f406cf8eafb476",
+          measurementId: "G-QF8T9NVQ8Q"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        import { getDatabase, ref, get, set, child, onValue} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+        const db = getDatabase();
+        
+        let red = document.getElementById('red');
+        let green = document.getElementById('green');
+        let blue = document.getElementById('blue');
+
+        function SetData(){
+            let stat="";
+            if (red.checked) {
+                stat = "red";
+            }
+            if (green.checked) {
+                stat = "green";
+            }
+            if (blue.checked) {
+                stat = "blue";
+            }
+            if(stat != ""){
+                set(ref(db,'LEDStatus/'),{
+                    Status: stat
+                })
+                .then(()=>{
+                    console.log("Data Added Successfully !");
+                }
+                )
+                .catch((error)=>{
+                    conosle.log("Unsuccessful");
+                    conosle.log(error);
+                })
+            }
+        }
+        function Reset() {
+            red.checked = false;
+            green.checked = false;
+            blue.checked = false;
+            set(ref(db,'LEDStatus/'),{
+                Status: "none"
+            })
+            .then(()=>{
+                console.log("Data reset Successfull !");
+            }
+            )
+            .catch((error)=>{
+                conosle.log("Unsuccessful");
+                conosle.log(error);
+            })
+        }
+
+        function updateColorRadio(val){ // It is being read from the database.
+            switch (val) {
+                    case "red":
+                    document.getElementById('circle1').style.backgroundColor = "red"; 
+                    document.getElementById('circle2').style.backgroundColor = "gray"; 
+                    document.getElementById('circle3').style.backgroundColor = "gray"; 
+                    red.checked = true;
+                    green.checked = false;
+                    blue.checked = false;
+                        break;
+                    case "green":
+                    document.getElementById('circle2').style.backgroundColor = "green";   
+                    document.getElementById('circle1').style.backgroundColor = "gray"; 
+                    document.getElementById('circle3').style.backgroundColor = "gray";
+                    red.checked = false;
+                    green.checked = true;
+                    blue.checked = false;
+                        break;
+                    case "blue":
+                    document.getElementById('circle3').style.backgroundColor = "blue";   
+                    document.getElementById('circle2').style.backgroundColor = "gray"; 
+                    document.getElementById('circle1').style.backgroundColor = "gray";
+                    red.checked = false;
+                    green.checked = false;
+                    blue.checked = true;
+                        break
+                    case "none":
+                    document.getElementById('circle1').style.backgroundColor = "gray";  
+                    document.getElementById('circle2').style.backgroundColor = "gray"; 
+                    document.getElementById('circle3').style.backgroundColor = "gray"; 
+                    red.checked = false;
+                    green.checked = false;
+                    blue.checked = false;
+                    default: 
+                        break;
+                    }
+                }
+
+        toggle.addEventListener('click',SetData);
+        reset.addEventListener('click',Reset);
+
+        window.onbeforeunload = Reset; // Change the status of LED to none whenver the window is closed. 
+
+        const dbref = ref(db, 'LEDStatus/Status'); // Regular monitoring of the database
+
+        onValue(dbref, (snapshot) => {
+            const data = snapshot.val();
+            updateColorRadio(data);
+        }).then(()=>{
+            console.log("Data change captured Successfully !");
+        }).catch((error)=>{
+                alert(error);
+        })
+
+      </script>
+</body>
+</html>
