@@ -1,18 +1,3 @@
-/*
- * Created by K. Suwatchai (Mobizt)
- * 
- * Email: k_suwatchai@hotmail.com
- * 
- * Github: https://github.com/mobizt
- * 
- * Copyright (c) 2022 mobizt
- *
-*/
-
-//Example shows how to connect to Firebase RTDB and perform basic operation for set, get, push and update data to database
-
-//Required WiFiNINA Library for Arduino from https://github.com/arduino-libraries/WiFiNINA
-
 #include "Firebase_Arduino_WiFiNINA.h"
 
 #define DATABASE_URL "remotelights-cd22c-default-rtdb.firebaseio.com" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app
