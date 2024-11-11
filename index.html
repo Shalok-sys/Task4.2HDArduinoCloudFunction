@@ -14,13 +14,13 @@
         <p><i>Made by Shalok Sharma</i></p>
         <h2>Select the LED:</h2>
         <input type="radio" id="red" value="red" name="LED">
-        <label for="red">RED LED</label>
+        <label for="red" style="color: red; font-size: 20px;">RED LED</label>
         <br>
         <input type="radio" id="green" value="red" name="LED">
-        <label for="green">GREEN LED</label>
+        <label for="green" style="color: green; font-size: 20px;">GREEN LED</label>
         <br>
         <input type="radio" id="blue" value="red" name="LED">
-        <label for="blue">BLUE LED</label>
+        <label for="blue" style="color: blue; font-size: 20px;">BLUE LED</label>
         <br><br>
         <button id="toggle">Toggle</button>
         <button id="reset">Reset</button>
@@ -77,8 +77,8 @@
                 }
                 )
                 .catch((error)=>{
-                    conosle.log("Unsuccessful");
-                    conosle.log(error);
+                    console.log("Unsuccessful");
+                    console.log(error);
                 })
             }
         }
